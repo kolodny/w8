@@ -1,0 +1,33 @@
+{
+  "name": "w8",
+  "version": "1.0.0",
+  "description": "give promises and thunks timeouts",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --harmony"
+  },
+  "author": "Moshe Kolodny",
+  "license": "MIT",
+  "devDependencies": {
+    "co": "^4.5.2",
+    "mocha": "^2.2.4",
+    "rek": "0.0.4"
+  },
+  "dependencies": {
+    "rek": "^0.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kolodny/w8.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kolodny/w8/issues"
+  },
+  "homepage": "https://github.com/kolodny/w8",
+  "keywords": [
+    "promise",
+    "thunk",
+    "timeout",
+    "co"
+  ]
+}
