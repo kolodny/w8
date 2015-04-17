@@ -10,11 +10,7 @@
   "license": "MIT",
   "devDependencies": {
     "co": "^4.5.2",
-    "mocha": "^2.2.4",
-    "rek": "0.0.4"
-  },
-  "dependencies": {
-    "rek": "^0.0.4"
+    "mocha": "^2.2.4"
   },
   "repository": {
     "type": "git",
