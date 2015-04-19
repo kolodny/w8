@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --harmony",
     "test-cov": "node --harmony ./node_modules/istanbul-harmony/lib/cli.js cover node_modules/mocha/bin/_mocha -- --reporter dot",
-    "test-travis": "node --harmony ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec"
+    "test-travis": "node --harmony ./node_modules/istanbul-harmony/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec"
   },
   "author": "Moshe Kolodny",
   "license": "MIT",
