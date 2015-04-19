@@ -1,15 +1,19 @@
 {
   "name": "w8",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "give promises and thunks timeouts",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --harmony"
+    "test": "mocha --harmony",
+    "test-cov": "node --harmony ./node_modules/istanbul-harmony/lib/cli.js cover node_modules/mocha/bin/_mocha -- --reporter dot",
+    "test-travis": "node --harmony ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec"
   },
   "author": "Moshe Kolodny",
   "license": "MIT",
   "devDependencies": {
     "co": "^4.5.2",
+    "coveralls": "^2.11.2",
+    "istanbul-harmony": "^0.3.12",
     "mocha": "^2.2.4"
   },
   "repository": {

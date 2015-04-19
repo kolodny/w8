@@ -30,12 +30,12 @@ function w8(ms, fn) {
 // everything from this point and on is taken from co
 // https://github.com/tj/co
 function toPromise(obj) {
-  if (!obj) return obj;
+  if (!obj) return Promise.resolve(obj);
   if (isPromise(obj)) return obj;
   if ('function' == typeof obj) return thunkToPromise.call(this, obj);
   if (Array.isArray(obj)) return arrayToPromise.call(this, obj);
   if (isObject(obj)) return objectToPromise.call(this, obj);
-  return obj;
+  return Promise.resolve(obj);
 }
 
 function thunkToPromise(fn) {
@@ -43,7 +43,7 @@ function thunkToPromise(fn) {
   return new Promise(function (resolve, reject) {
     fn.call(ctx, function (err, res) {
       if (err) return reject(err);
-      if (arguments.length > 2) res = slice.call(arguments, 1);
+      if (arguments.length > 2) res = Array.prototype.slice.call(arguments, 1);
       resolve(res);
     });
   });
