@@ -7,6 +7,8 @@ Limit your promises (or thunks) for use in co
 
 #### Usage
 
+First argument is the timeout in ms and the second is the promise/thunk/object/array, it returns a promise
+
 ```js
 var w8 = require('w8');
 var co = require('co');
