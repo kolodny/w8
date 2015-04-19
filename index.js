@@ -27,6 +27,8 @@ function w8(ms, fn) {
 }
 
 
+// everything from this point and on is taken from co
+// https://github.com/tj/co
 function toPromise(obj) {
   if (!obj) return obj;
   if (isPromise(obj)) return obj;

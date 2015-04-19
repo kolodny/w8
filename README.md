@@ -18,8 +18,8 @@ var fs = Promise.promisifyAll(require('fs'));
 co(function *() {
   var fileReadPromise = fs.readFileAsync('package.json');
   try {
-    var pkg = yield w8(100, fileReadPromise).toString();
-    console.log('version is', pkg.version);
+    var pkgStr = yield w8(100, fileReadPromise).toString();
+    console.log('version is', JSON.parse(pkgStr).version);
   } catch (e) {
     console.error('getting file took more than 100 ms');
   }
