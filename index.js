@@ -1,6 +1,6 @@
 module.exports = w8;
 
-function w8(fn, ms) {
+function w8(ms, fn) {
   if (typeof fn === 'function') {
     promiseFn = new Promise(function(resolve, reject) {
       fn(function(err, result) {

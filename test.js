@@ -16,7 +16,7 @@ describe('w8', function() {
 
     describe('when resolved before the timeout', function() {
       it('calls the callback', function(done) {
-        w8(fn, 20).then(function(result) {
+        w8(20, fn).then(function(result) {
           assert.equal(result, 'ok');
           done();
         });
@@ -25,7 +25,7 @@ describe('w8', function() {
 
     describe('when resolved after the timeout', function() {
       it('throws an async error', function(done) {
-        w8(fn, 5).catch(function(err) {
+        w8(5, fn).catch(function(err) {
           assert(err);
           done();
         });
@@ -43,7 +43,7 @@ describe('w8', function() {
 
     describe('when resolved before the timeout', function() {
       it('calls the callback', function(done) {
-        w8(fn, 20).then(function(err) {
+        w8(20, fn).then(function(err) {
           assert(!err);
           done();
         });
@@ -52,7 +52,7 @@ describe('w8', function() {
 
     describe('when resolved after the timeout', function() {
       it('throws an async error', function(done) {
-        w8(fn, 5).catch(function(err) {
+        w8(5, fn).catch(function(err) {
           assert(err);
           done();
         });
@@ -69,9 +69,9 @@ describe('w8', function() {
         });
       }
       co(function *() {
-        yield w8(makePromise(), 20);
+        yield w8(20, makePromise());
         try {
-          yield w8(makePromise(), 5);
+          yield w8(5, makePromise());
         } catch (e) {
           done();
         }

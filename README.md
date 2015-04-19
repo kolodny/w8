@@ -14,8 +14,9 @@ var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
 
 co(function *() {
+  var fileReadPromise = fs.readFileAsync('package.json');
   try {
-    yield(w8(fs.readFileAsync('package.json')), 100);
+    yield w8(100, fileReadPromise);
   } catch (e) {
     console.error('getting file took more than 100 ms');
   } 
