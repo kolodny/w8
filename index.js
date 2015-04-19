@@ -1,16 +1,7 @@
 module.exports = w8;
 
 function w8(ms, fn) {
-  if (typeof fn === 'function') {
-    promiseFn = new Promise(function(resolve, reject) {
-      fn(function(err, result) {
-        if (err) return reject(err);
-        else return resolve(result);
-      });
-    });
-  } else {
-    promiseFn = fn;
-  }
+  fn = toPromise(fn);
 
   return new Promise(function(resolve, reject) {
     var ran = false;
@@ -20,7 +11,7 @@ function w8(ms, fn) {
         reject(new Error('w8 timeout exceeded'));
       }
     }, ms);
-    promiseFn.then(function(result) {
+    fn.then(function(result) {
       if (!ran) {
         ran = true;
         resolve(result);
@@ -35,6 +26,16 @@ function w8(ms, fn) {
 
 }
 
+
+function toPromise(obj) {
+  if (!obj) return obj;
+  if (isPromise(obj)) return obj;
+  if ('function' == typeof obj) return thunkToPromise.call(this, obj);
+  if (Array.isArray(obj)) return arrayToPromise.call(this, obj);
+  if (isObject(obj)) return objectToPromise.call(this, obj);
+  return obj;
+}
+
 function thunkToPromise(fn) {
   var ctx = this;
   return new Promise(function (resolve, reject) {
@@ -44,4 +45,39 @@ function thunkToPromise(fn) {
       resolve(res);
     });
   });
+}
+
+function arrayToPromise(obj) {
+  return Promise.all(obj.map(toPromise, this));
+}
+
+function objectToPromise(obj){
+  var results = new obj.constructor();
+  var keys = Object.keys(obj);
+  var promises = [];
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var promise = toPromise.call(this, obj[key]);
+    if (promise && isPromise(promise)) defer(promise, key);
+    else results[key] = obj[key];
+  }
+  return Promise.all(promises).then(function () {
+    return results;
+  });
+
+  function defer(promise, key) {
+    // predefine the key in the result
+    results[key] = undefined;
+    promises.push(promise.then(function (res) {
+      results[key] = res;
+    }));
+  }
+}
+
+function isPromise(obj) {
+  return 'function' == typeof obj.then;
+}
+
+function isObject(val) {
+  return Object == val.constructor;
 }

@@ -4,19 +4,19 @@ var co = require('co');
 
 describe('w8', function() {
 
-  var fn;
+  var obj;
 
   describe('when given a thunk', function() {
 
     beforeEach(function() {
-       fn = function(cb) { setTimeout(function() {
+       obj = function(cb) { setTimeout(function() {
         cb(null, 'ok');
        }, 10); };
     });
 
     describe('when resolved before the timeout', function() {
       it('calls the callback', function(done) {
-        w8(20, fn).then(function(result) {
+        w8(20, obj).then(function(result) {
           assert.equal(result, 'ok');
           done();
         });
@@ -25,7 +25,7 @@ describe('w8', function() {
 
     describe('when resolved after the timeout', function() {
       it('throws an async error', function(done) {
-        w8(5, fn).catch(function(err) {
+        w8(5, obj).catch(function(err) {
           assert(err);
           done();
         });
@@ -36,14 +36,14 @@ describe('w8', function() {
 
   describe('when given a promise', function() {
     beforeEach(function() {
-      fn = new Promise(function(res) {
+      obj = new Promise(function(res) {
         setTimeout(res, 10);
       });
     });
 
     describe('when resolved before the timeout', function() {
       it('calls the callback', function(done) {
-        w8(20, fn).then(function(err) {
+        w8(20, obj).then(function(err) {
           assert(!err);
           done();
         });
@@ -52,7 +52,66 @@ describe('w8', function() {
 
     describe('when resolved after the timeout', function() {
       it('throws an async error', function(done) {
-        w8(5, fn).catch(function(err) {
+        w8(5, obj).catch(function(err) {
+          assert(err);
+          done();
+        });
+      });
+    });
+
+  });
+
+
+  describe('when given an array', function() {
+
+    beforeEach(function() {
+      obj = [
+        new Promise(function(res) {setTimeout(function() {res('a')}, 10)}),
+        new Promise(function(res) {setTimeout(function() {res('b')}, 10)}),
+      ];
+    });
+
+    describe('when resolved before the timeout', function() {
+      it('calls the callback', function(done) {
+        w8(20, obj).then(function(result) {
+          assert.deepEqual(result, ['a', 'b']);
+          done();
+        });
+      });
+    });
+
+    describe('when resolved after the timeout', function() {
+      it('throws an async error', function(done) {
+        w8(5, obj).catch(function(err) {
+          assert(err);
+          done();
+        });
+      });
+    });
+
+  });
+
+  describe('when given an object', function() {
+
+    beforeEach(function() {
+      obj = {
+        a: new Promise(function(res) {setTimeout(function() {res('a')}, 10)}),
+        b: new Promise(function(res) {setTimeout(function() {res('b')}, 10)}),
+      };
+    });
+
+    describe('when resolved before the timeout', function() {
+      it('calls the callback', function(done) {
+        w8(20, obj).then(function(result) {
+          assert.deepEqual(result, {a: 'a', b: 'b'});
+          done();
+        });
+      });
+    });
+
+    describe('when resolved after the timeout', function() {
+      it('throws an async error', function(done) {
+        w8(5, obj).catch(function(err) {
           assert(err);
           done();
         });
