@@ -7,11 +7,36 @@ w8
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Downloads][downloads-image]][downloads-url]
 
-Limit your promises (or thunks) for use in co
+Give promises (and thunks/objects/arrays) a timeout that it must finish before or else it gets rejected  
+Example
+
+```js
+var w8 = require('w8');
+var fastPromise = new Promise(function(res) {
+  setTimeout(function() {
+    res('ok1');
+  }, 10);
+});
+var slowPromise = new Promise(function(res) {
+  setTimeout(function() {
+    res('ok2');
+  }, 1000);
+});
+w8(100, fastPromise).then(function(data) {
+  console.log('fastPromise was fast enough');
+  console.log(data); // 'ok1'
+  return w8(100, slowPromise);
+}).catch(function(err) {
+  console.log("slowPromisie wasn't fast enough");
+});
+```
+
 
 #### Usage
 
 First argument is the timeout in ms and the second is the promise/thunk/object/array, it returns a promise
+
+Here's a sample usage with [co](https://github.com/tj/co)
 
 ```js
 var w8 = require('w8');
