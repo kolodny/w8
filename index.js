@@ -3,7 +3,6 @@ module.exports = w8;
 function w8(ms, promise) {
 
   return new Promise(function(resolve, reject) {
-    var ran = false;
     var timer = setTimeout(function() {
       reject(new Error('w8 timeout exceeded'));
     }, ms);
