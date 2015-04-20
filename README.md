@@ -23,7 +23,7 @@ co(function *() {
   var fileReadPromise = fs.readFileAsync('package.json');
   try {
     var pkgStr = yield w8(100, fileReadPromise).toString();
-    console.log('version is', JSON.parse(pkgStr).version);
+    console.log('package.json contents:', pkgStr);
   } catch (e) {
     console.error('getting file took more than 100 ms');
   }

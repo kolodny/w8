@@ -102,13 +102,14 @@ describe('w8', function() {
       obj = [
         new Promise(function(res) {setTimeout(function() {res('a')}, 10)}),
         new Promise(function(res) {setTimeout(function() {res('b')}, 10)}),
+        'c'
       ];
     });
 
     describe('when resolved before the timeout', function() {
       it('calls the callback', function(done) {
         w8(20, obj).then(function(result) {
-          assert.deepEqual(result, ['a', 'b']);
+          assert.deepEqual(result, ['a', 'b', 'c']);
           done();
         });
       });
@@ -131,13 +132,14 @@ describe('w8', function() {
       obj = {
         a: new Promise(function(res) {setTimeout(function() {res('a')}, 10)}),
         b: new Promise(function(res) {setTimeout(function() {res('b')}, 10)}),
+        c: 'c'
       };
     });
 
     describe('when resolved before the timeout', function() {
       it('calls the callback', function(done) {
         w8(20, obj).then(function(result) {
-          assert.deepEqual(result, {a: 'a', b: 'b'});
+          assert.deepEqual(result, {a: 'a', b: 'b', c: 'c'});
           done();
         });
       });

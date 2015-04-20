@@ -1,33 +1,19 @@
 module.exports = w8;
 
-function w8(ms, fn) {
-  fn = toPromise(fn);
+function w8(ms, promise) {
 
   return new Promise(function(resolve, reject) {
     var ran = false;
     var timer = setTimeout(function() {
-      if (!ran) {
-        ran = true;
-        reject(new Error('w8 timeout exceeded'));
-      }
+      reject(new Error('w8 timeout exceeded'));
     }, ms);
-    fn.then(function(result) {
-      if (!ran) {
-        ran = true;
-        resolve(result);
-      }
-    }).catch(function(err) {
-      if (!ran) {
-        ran = true;
-        reject(err);
-      }
-    });
+    toPromise(promise).then(resolve, reject);
   });
 
 }
 
 
-// everything from this point and on is taken from co
+// everything from this point and on is taken and modified from co
 // https://github.com/tj/co
 function toPromise(obj) {
   if (!obj) return Promise.resolve(obj);
@@ -60,8 +46,7 @@ function objectToPromise(obj){
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
     var promise = toPromise.call(this, obj[key]);
-    if (promise && isPromise(promise)) defer(promise, key);
-    else results[key] = obj[key];
+    defer(promise, key);
   }
   return Promise.all(promises).then(function () {
     return results;

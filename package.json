@@ -1,6 +1,6 @@
 {
   "name": "w8",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "give promises and thunks timeouts",
   "main": "index.js",
   "scripts": {
